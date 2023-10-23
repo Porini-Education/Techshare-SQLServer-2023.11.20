@@ -4,6 +4,4 @@
 
 *sometimes forgotten but which could be useful*
 
-edited by [Porini Education](Asset/RGB_Badge_PIRC.png)
-
-
+Curated by Porini Education <img src="/Asset/RGB_Badge_PIRC.png" width=90px>
