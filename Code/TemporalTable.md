@@ -67,9 +67,9 @@ select * from dbo.ArticlesHistory ;  -- date are stored in the UTC time zone
 GO
 ```
 
-![Alt text](..\Assets\Temporal_Select01.png)
+![Alt text](../Assets/Temporal_Select01.png)
 
-![Alt text](..\Assets\Temporal_Select02.png)
+![Alt text](../Assets/Temporal_Select02.png)
 
 ```SQL
 
@@ -81,7 +81,7 @@ where IdArticle=2
 order by DateStart desc
 ```
 
-![Alt text](..\Assets\Temporal_Select03.png)
+![Alt text](../Assets/Temporal_Select03.png)
 
 ```SQL
 
@@ -98,10 +98,11 @@ select * from dbo.ArticlesHistory -- the new article (Echo) is not present in hi
 
 ```
 
-![Alt text](..\Assets\Temporal_Select04.png)
+![Alt text](../Assets/Temporal_Select04.png)
 
 the new article (Echo) is not present in historic table
-![Alt text](..\Assets\Temporal_Select05.png)
+
+![Alt text](../Assets/Temporal_Select05.png)
 
 
 ### Deleting table
