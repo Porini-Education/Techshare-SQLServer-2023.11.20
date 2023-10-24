@@ -67,9 +67,9 @@ select * from dbo.ArticlesHistory ;  -- date are stored in the UTC time zone
 GO
 ```
 
-![Alt text](image.png)
+![Alt text](..\Assets\Temporal_Select01.png)
 
-![Alt text](image-1.png)
+![Alt text](..\Assets\Temporal_Select02.png)
 
 ```SQL
 
@@ -81,7 +81,28 @@ where IdArticle=2
 order by DateStart desc
 ```
 
-![Alt text](image-2.png)
+![Alt text](..\Assets\Temporal_Select03.png)
+
+```SQL
+
+update dbo.Articles set Price = Price + 50 where IdArticle in(2,3);
+GO
+
+-- new articles
+insert into dbo.Articles values (5,'Echo',100);
+GO
+
+select *, DateStart,DateEnd from dbo.Articles for system_time all
+
+select * from dbo.ArticlesHistory -- the new article (Echo) is not present in historic table
+
+```
+
+![Alt text](..\Assets\Temporal_Select04.png)
+
+the new article (Echo) is not present in historic table
+![Alt text](..\Assets\Temporal_Select05.png)
+
 
 ### Deleting table
 
