@@ -12,6 +12,24 @@
           <AssociatedConnUserName />
           <FullPath>DynamicDataMasking.sql</FullPath>
         </FileNode>
+        <FileNode Name="REST_AzureContainer.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>REST_AzureContainer.sql</FullPath>
+        </FileNode>
+        <FileNode Name="REST_AzureFileShare.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>REST_AzureFileShare.sql</FullPath>
+        </FileNode>
+        <FileNode Name="REST_ExternalResources.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>REST_ExternalResources.sql</FullPath>
+        </FileNode>
         <FileNode Name="RowLevelSecurity.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
