@@ -10,4 +10,5 @@ Curated by **Porini Education** <img src="/Assets/RGB_Badge_PIRC.png" width=110p
 |---|---|
 |[Temporal Table](/Code/TemporalTable.md)|Le temporal table consentono di implementare nativamente un system-versioned temporale permettendo di recuperare i dati ad un certo momento |
 |[Dynamic Data Masking](/Code/DynamicDataMasking.md)|Dynamic Data Masking limit data exposure by masking it to nonprivileged users |
+|[Row Level Security](/Code/RowLevelSecurity.md)|Row Level Security allow to control access to rows by a security predicate defined as an inline table-valued function |
 |[SOLUTIONS](/Code/TechShare_20231120/)|Visual Studio Solution with example code |
