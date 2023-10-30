@@ -148,6 +148,11 @@ GO
 ALTER TABLE dbo.Employees
 ALTER COLUMN Email DROP MASKED;
 
+EXECUTE AS USER = 'User100'
+GO
+
+Select * from dbo.Employees;
+
 ```
 
 ### GRANT UNMASK
@@ -173,7 +178,7 @@ GO
 ## Cleaning operation
 
 ```SQL
---- Cleaning; rimozione del DataBase
+--- Cleaning;
 use master;
 
 DROP database DataMaskingTest;

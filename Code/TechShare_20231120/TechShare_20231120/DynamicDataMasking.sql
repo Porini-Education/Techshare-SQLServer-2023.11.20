@@ -5,7 +5,8 @@ Demo Dynamic Data Masking
 
 */
 
--- Creazione Database per Demo
+-- Environment setup
+
 Use master
 GO
 
@@ -18,128 +19,132 @@ GO
 Use DataMaskingTest
 GO
 
--- Creazione Tabella Dati Demo
+-- Create the table and insert some values
 
-drop table if exists dbo.DatiPersone;
+drop table if exists dbo.Employees;
 GO
 
-create table dbo.DatiPersone
-	( 
-	Id int identity(1,1), 
-	Persona varchar(50) not null,
-	Citta varchar(50),
-	CreditCard varchar(20) MASKED WITH (FUNCTION = 'partial(0,"XXXX-XXXX-XXXX-",4)'),
-	Telefono varchar(20),
-	Retribuzione numeric (8,2),
-	Email varchar(50)  MASKED WITH (FUNCTION = 'email()'),
-	Codice int
-	);
+create table dbo.Employees
+ ( 
+ Id int identity(1,1), 
+ Person varchar(50) not null,
+ City varchar(50),
+ CreditCard varchar(20) MASKED WITH (FUNCTION = 'partial(0,"XXXX-XXXX-XXXX-",4)'),
+ MobileNumber varchar(20),
+ Income numeric (8,2) MASKED WITH (FUNCTION = 'default()'),
+ Email varchar(50)  MASKED WITH (FUNCTION = 'email()'),
+ Code int
+ );
 GO
 
--- Inserimento dati Demo
-insert into dbo.DatiPersone
+insert into dbo.Employees
 values
-('Topolino','Parigi','1234-9993-5643-1122','33987633',1200.56,'topo.lino@outlook.com',120),
+('Topolino','Paris','1234-9993-5643-1122','33987633',1200.56,'topo.lino@outlook.com',120),
 ('Pluto','Palermo','1234-3327-5643-1122','365487600',6210.88,'pluto.roger@outlook.it',345),
 ('Pippo','Catania','3345-2244-7832-1122','22398764',9200.00,'pippo.ciccio@gmail.com',1234),
-('Poldo','Boston','2188-6678-9127-4385','451788',15600.00,'poldo@porini.com',5532)
+('Poldo','Boston','2188-6678-9127-4385','451788',15600.00,'poldo@acme.com',5532)
 ;
 GO
 
--- eseguire la quary con utente con diritti amministrativi vede tutti i dati in chiaro
-Select * from dbo.DatiPersone;
+-- query the table with a user with CONTROL right
+Select * from dbo.Employees;
 GO
 
-
---Creazione di utente con diritti non amministrativi
+-- create a user with only reading right
 use master
 GO
 
-if exists (select * from sys.syslogins where [name]= 'Utente100') drop login Utente100;
+if exists (select * from sys.syslogins where [name]= 'User100') drop login User100;
 GO
 
-create login Utente100 with password = 'Poldo1122';
+create login User100 with password = 'Poldo1122';
 GO
 
 use DataMaskingTest;
 GO
 
-create user Utente100 for login Utente100;
+create user User100 for login User100;
 GO
 
--- abilitazione di lettura e scrittura allo user 
-EXEC sp_addrolemember 'db_datareader', 'Utente100'; 
-GO  
-EXEC sp_addrolemember 'db_datawriter', 'Utente100'; 
+-- Add the user to the reading role in the database 
+EXEC sp_addrolemember 'db_datareader', 'User100'; 
 GO  
 
--- Impersono l'utente senza diritti amministrativi
-EXECUTE AS USER = 'Utente100'
+/*
+-- if you want to test also with the writing role
+EXEC sp_addrolemember 'db_datawriter', 'User100'; 
+GO  
+*/
+
+-- Let's try to query with the new user
+EXECUTE AS USER = 'User100'
 go
-select 	USER_NAME(); -- Verifica utente connesso
+select  USER_NAME(); -- verify the connected user
 GO
 
--- Il dato è mascherato
-Select * from dbo.DatiPersone;
+-- query the masked values
+Select * from dbo.Employees;
 GO
 
--- Ritorno all'utenza amministrativa originale
+-- Go back to the main user and double check it
 Revert
 Go
-select 	USER_NAME();
+select  USER_NAME();
 GO
 
--- Modifica Attributi di Data masking
-ALTER TABLE dbo.DatiPersone
-ALTER COLUMN Retribuzione ADD MASKED WITH (FUNCTION = 'default()');
+-- Alter the data masking in some fields
+
+ALTER TABLE dbo.Employees
+ALTER COLUMN Code ADD MASKED WITH (FUNCTION = 'random(100, 900)');
 GO
 
-ALTER TABLE dbo.DatiPersone
-ALTER COLUMN Codice ADD MASKED WITH (FUNCTION = 'random(100, 900)');
+-- query the masked data with a WHERE condition
+EXECUTE AS USER = 'User100'
+GO
+select  USER_NAME();
 GO
 
--- verifica funzionamento Data Masking
-EXECUTE AS USER = 'Utente100'
+Select * from dbo.Employees
+where Income > 10000        -- the WHERE is on the original values
 GO
-select 	USER_NAME();
-GO
-
-Select * from dbo.DatiPersone;
-GO
-
--- il filtro where lavora sui dati non mascherati
-Select * from dbo.DatiPersone
-where retribuzione > 10000
-GO
-
 
 Revert
 GO
-select 	USER_NAME();
+select  USER_NAME();
 GO
 
-Select * from dbo.DatiPersone;
+-- DROP DYNAMIC DATA MASK
+ALTER TABLE dbo.Employees
+ALTER COLUMN Email DROP MASKED;
+
+EXECUTE AS USER = 'User100'
 GO
 
--- Assegnazione del diritto di vedere i dati in chiaro anche se l'utente non è amministratore
-GRANT UNMASK TO Utente100;
+Select * from dbo.Employees;
+
+Revert
 GO
 
--- Verifica nuovi diritti
-EXECUTE AS USER = 'Utente100'
+-- GRANT UNMASK
+-- the specific right to see the original values
+GRANT UNMASK TO User100;
+GO
+
+-- Query the unmasked data with the new user
+EXECUTE AS USER = 'User100'
 go
-select 	USER_NAME();
-GO
 
-Select * from dbo.DatiPersone;
+
+Select * from dbo.Employees;
 GO
 
 REVERT;
 GO
 
-
---- Cleaning; rimozione del DataBase
+--- Cleaning 
 use master;
 
 DROP database DataMaskingTest;
+GO
+
 GO
