@@ -15,21 +15,21 @@ Given the fact that you already have a storage account on Azure, a container and
 
 You have to create the Shared Access Signature (SAS) of the Storage Account or Container or single file.
 
-![Alt text](../Asset/SASToken.png)
+![Alt text](../Assets/SASToken.png)
 
 These are the required check boxes:
 
-![Alt text](../Asset/BlobPermission.png)
+![Alt text](../Assets/BlobPermission.png)
 
 Mind the fact that during the creation steps of the SAS token you will have to declare a *due date*. This is the reason why you will have to edit the following code.
 
 The output of the procedure is in JSON in the "result" key, or in XML in /output/result node.
 
-The url parameter is made by the concatenation of file address and SAS separated by a question mark.
+The URL parameter is made by the concatenation of the file address and the SAS token separated by a question mark.
 
 ## Example: read JSON file from a container
 
-> In the following snippet we will read the file *t2.json* placed in the container *flatfile* in the storage account *porinieducation*.
+> In the following snippet we will read the file *t2.json* placed in the container *flatfile* in the storage account *porinieducation*. 
 
 - JSON
 
