@@ -9,4 +9,4 @@ Curated by **Porini Education** <img src="/Assets/RGB_Badge_PIRC.png" width=110p
 |File|Description|
 |---|---|
 |[Temporal Table](/Code/TemporalTable.md)|Le temporal table consentono di implementare nativamente un system-versioned temporale permettendo di recuperare i dati ad un certo momento |
-|[SOLUTIONS](/Code/TechShare_20131120/TechShare_20231120.ssmssln)|Visual Studio Solution with example code |
+|[SOLUTIONS](/Code/TechShare_20231120/TechShare_20231120.ssmssln)|Visual Studio Solution with example code |
