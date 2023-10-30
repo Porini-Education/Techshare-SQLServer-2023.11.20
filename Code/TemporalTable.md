@@ -211,55 +211,68 @@ If FOR SYSTEM_TIME is not indicated only current value are returned, like usual 
 
 ```SQL
 
--- nuovo aggiornamento
+-- another update
 update dbo.Articles set Price = 8001 where IdArticle=1;
 insert into dbo.Articles values (2,'bravo',100);
 go
 
-select * from dbo.Articles; -- valore attuale
+select * from dbo.Articles; -- current values
 
-select *, DateStart, DateEnd from dbo.Articles  FOR SYSTEM_TIME ALL; -- tutta la storia
+select *, DateStart, DateEnd 
+from dbo.Articles  
+FOR SYSTEM_TIME ALL; -- all values: historical and current
 
--- Data Puntuale
+-- Data at specific time
 select * from dbo.Articles FOR SYSTEM_TIME AS OF '2021-02-02 00:00:00';
 select * from dbo.Articles FOR SYSTEM_TIME AS OF '2021-03-02 00:00:00';
 
---Intervallo date
+--Date interval
 
--- FROM BETWEEN dati in overlap: esistevano prima e finiscono dopo
+-- BETWEEN: overlapping data that existed before and ends after
 select * from dbo.Articles  FOR SYSTEM_TIME FROM '2021-02-01 00:00:00' TO '2021-04-01 00:00:00'; 
 select * from dbo.Articles  FOR SYSTEM_TIME BETWEEN '2021-02-01 00:00:00' AND '2021-04-01 00:00:00';  
 select * from dbo.Articles  FOR SYSTEM_TIME BETWEEN '2021-02-01 00:00:00' AND '2021-03-31 23:59:59'; 
 
 
--- CONTAINED i valori che esistevano all'interno del periodo
+-- CONTAINED: data that exists within the period
 select *, DateStart, DateEnd from dbo.Articles  FOR SYSTEM_TIME CONTAINED IN ('20210201' , '20210401');
 select *, DateStart, DateEnd from dbo.Articles  FOR SYSTEM_TIME CONTAINED IN ('20210201' , '2021-03-31 23:59:59');
 
 select * from dbo.Articles  FOR SYSTEM_TIME ALL; -- tutta la storia
 
--- eliminazione record
+-- delete record
 delete from dbo.Articles where IdArticle=1;
 GO
 
 select * from  dbo.Articles;
 
-select *,DateStart, DateEnd  from dbo.Articles  FOR SYSTEM_TIME ALL; -- la storia del record eliminato rimane
+ -- deleted data history remains
+ select *, DateStart, DateEnd  
+ from dbo.Articles  FOR SYSTEM_TIME ALL;
 
--- reinserisco un record con lo stesso valore di primary key
+-- insert again a data with same primary key value
 insert into dbo.Articles values (1,'zulu',1900);
 
 select * from  dbo.Articles;
 
-select *,DateStart, DateEnd  from dbo.Articles  FOR SYSTEM_TIME ALL
+-- the period without that date is recorded
+select *, DateStart, DateEnd  
+from dbo.Articles  FOR SYSTEM_TIME ALL
 where IdArticle=1
-order by IdArticle, DateStart desc;  -- marcato il periodo di assenza del record
+order by IdArticle, DateStart desc;  
 
 select * from dbo.Articles for system_time as of '20220501 12:43:00';
 
+```
 
--- Indicazione dei periodi nel fuso orario di inserimento
+### How to get time in the insertion time zone
 
+All dates and times in the Historic Table are recorded in UTC Time.
+
+To get data in the other time zone you could use AT TIME ZONE option
+
+```SQL
+-- List of Time Zone
 -- select * from sys.time_zone_info
 
 SELECT *,
