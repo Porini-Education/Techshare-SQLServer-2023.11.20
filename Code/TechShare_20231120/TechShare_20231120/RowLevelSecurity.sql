@@ -1,18 +1,6 @@
-/* 
-Demo Row Level Security
-
-Implementazione diritti di lettura scrittura solo sui record dei clienti associati alla login
-tramite una tabella di configurazione.
-
-Nell'esempio gli utenti del gruppo db_owner accedo a tutti i record
-*/
-
---- https://docs.microsoft.com/en-us/sql/relational-databases/security/row-level-security?view=sql-server-2017
-
+-- Create database, table and function for testing
 Use master
 GO
-
-drop  database if exists RLSTest;
 
 create database RLSTest;
 GO
@@ -23,6 +11,7 @@ GO
 create table dbo.DatiVendite(IDCliente int, Vendite int);
 GO
 
+-- Table with sensitive data
 insert into dbo.DatiVendite values
 (100,10),(100,222),(100,67),
 (200,33),(200,376),(200,14),(200,99),
@@ -32,172 +21,159 @@ insert into dbo.DatiVendite values
 select * from dbo.DatiVendite;
 GO
 
--- L'utente User100 può vedere solo i record del cliente 100
--- L'utente User250 può vedere solo i record dei clienti 200 e 300
+--
+-- User100 read only records from the customer 100
+-- User250 read only records from the customers 220 and 300
+-- Users in db_owner group is able to read all the records
 
---- Creo tabella di configurazione security
+-- Let's create a security configuration table
 create table dbo.DatiVenditeSecurityConfig
-(Utente sysname,
-IDCliente int)
-;
+(
+ Utente sysname,
+ IDCliente int
+);
 GO
 
--- truncate table dbo.DatiVenditeSecurityConfig
 insert into dbo.DatiVenditeSecurityConfig values
-('Utente100',100), ('Utente250',200),('Utente250',300);
+('User100',100), ('User250',200),('User250',300);
 GO
 
-select * from dbo.DatiVenditeSecurityConfig
-go
-
---Creo le login
+-- Create logins and users
 use master
 go
 
-if exists (select * from sys.syslogins where [name]= 'Utente100') drop login Utente100;
-if exists (select * from sys.syslogins where [name]= 'Utente250') drop login Utente250;
+if exists (select * from sys.syslogins where [name]= 'User100') drop login User100;
+if exists (select * from sys.syslogins where [name]= 'User250') drop login User250;
 
-CREATE LOGIN Utente100 WITH PASSWORD = 'Poldo1122';
-CREATE LOGIN Utente250 WITH PASSWORD = 'Poldo1122';
+CREATE LOGIN User100 WITH PASSWORD = 'Poldo1122';
+CREATE LOGIN User250 WITH PASSWORD = 'Poldo1122';
 
 use RLSTest;
 GO
 
-CREATE USER Utente100 FOR LOGIN Utente100;
-CREATE USER Utente250 FOR LOGIN Utente250;
+CREATE USER User100 FOR LOGIN User100;
+CREATE USER User250 FOR LOGIN User250;
 
--- abilito gli utenti attivita di lettura scrittura
-EXEC sp_addrolemember 'db_datareader', 'Utente100'; 
+-- Configure the reading right to the users
+EXEC sp_addrolemember 'db_datareader', 'User100'; 
 GO  
-EXEC sp_addrolemember 'db_datareader', 'Utente250'; 
+EXEC sp_addrolemember 'db_datareader', 'User250'; 
 GO  
-EXEC sp_addrolemember 'db_datawriter', 'Utente100'; 
+EXEC sp_addrolemember 'db_datawriter', 'User100'; 
 GO  
-EXEC sp_addrolemember 'db_datawriter', 'Utente250'; 
+EXEC sp_addrolemember 'db_datawriter', 'User250'; 
 GO  
 
 
--- Creo la funzione di security che abilita la lettura dei record dei clienti associati
--- Complicabile a piacere e parametrizzabile
+-- Creation of the security function to configure the customer records
+-- we can configure it in every way
 DROP FUNCTION IF EXISTS dbo.AccessoDatiVendita;
 GO
 
 CREATE FUNCTION dbo.AccessoDatiVendita(@IDCliente int)
-	RETURNS TABLE
-	WITH SCHEMABINDING
+ RETURNS TABLE
+ WITH SCHEMABINDING
 AS
-	RETURN 
-		SELECT 1 AS accessResult
-		FROM dbo.DatiVendite a 
-		INNER JOIN dbo.DatiVenditeSecurityConfig sp 
-		ON a.IDCliente = sp.IDCliente
+ RETURN 
+  SELECT 1 AS accessResult
+  FROM dbo.DatiVendite a 
+  INNER JOIN dbo.DatiVenditeSecurityConfig sp 
+  ON a.IDCliente = sp.IDCliente
 
-		WHERE
-			USER_NAME() = sp.Utente
-			AND sp.IDCliente = @IDCliente 
-			OR IS_MEMBER('db_owner') = 1
+  WHERE
+   USER_NAME() = sp.Utente
+   AND sp.IDCliente = @IDCliente 
+   OR IS_MEMBER('db_owner') = 1
 ;
 GO
 
 
--- Associo la funzione di security alla tabella e la attivo
+-- Connect the security function to the table
 DROP SECURITY POLICY IF EXISTS dbo.AccessoUserDati ;
 GO
 
+-- Filter on reading
 CREATE SECURITY POLICY dbo.AccessoUserDati  
-ADD FILTER PREDICATE dbo.AccessoDatiVendita(IDCliente)  
-ON dbo.DatiVendite  
-WITH (STATE = ON);  
+ ADD FILTER PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite  
+ WITH (STATE = ON);  
 GO
 
+-- Another way to add to a a table to a existing security policy
 --ALTER SECURITY POLICY dbo.AccessoUserDati
---	ALTER FILTER PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite,
---	ALTER BLOCK PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite;
+-- ALTER FILTER PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite,
+-- ALTER BLOCK PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite;
 --go
 
--- Test Utente 100
-EXECUTE AS USER = 'Utente100'
+
+-- Test User100
+EXECUTE AS USER = 'User100'
 go
-select 	USER_NAME();
+select  USER_NAME();
 GO
--- vede solo i record del cliente 100
+
 select * from dbo.DatiVendite;
 GO
 
--- ritorno all'utente originario db owner
--- vede tutti i record
+-- revert to the original db owner
+-- see all the records
 REVERT;
 select * from dbo.DatiVendite;
 GO
 
 
--- Test Utente 250
-EXECUTE AS USER = 'Utente250'
+-- Test User250
+EXECUTE AS USER = 'User250'
 go
-select 	USER_NAME();
+select  USER_NAME();
 GO
--- vede solo i record dei clienti 200 e 300
-select * from dbo.DatiVendite;
-GO
-
-REVERT;
-
-insert into dbo.DatiVenditeSecurityConfig values
-('Utente100',300)
-GO
-
--- Test Utente 100
-EXECUTE AS USER = 'Utente100'
-go
-select 	USER_NAME();
-GO
--- vede solo i record del cliente 100
-select * from dbo.DatiVendite;
-GO
-
-REVERT;
-
--- Test Utente 100
-EXECUTE AS USER = 'Utente100'
-go
-select 	USER_NAME();
-GO
----- Inserimento
-insert into dbo.DatiVendite values
-(250,199)
 
 select * from dbo.DatiVendite;
 GO
 
 REVERT;
 
-DROP SECURITY POLICY dbo.AccessoUserDati 
-
-CREATE SECURITY POLICY dbo.AccessoUserDati 
-ADD BLOCK PREDICATE dbo.AccessoDatiVendita(IDCliente)  
-ON dbo.DatiVendite  
-WITH (STATE = ON);  
-GO
-
-
-EXECUTE AS USER = 'Utente100'
+-- User 100 could insert record for IDCliente <> 100
+EXECUTE AS USER = 'User100'
 go
-select 	USER_NAME();
-GO
+
+insert into dbo.DatiVendite 
+values (200,1009);
 
 select * from dbo.DatiVendite;
-GO
-
----- Inserimento
-insert into dbo.DatiVendite values
-(250,399);  --- ERRORE
-
 
 REVERT;
 
+select * from dbo.DatiVendite;
+
+-- Block on writing
+ALTER SECURITY POLICY dbo.AccessoUserDati  
+ ADD BLOCK PREDICATE dbo.AccessoDatiVendita(IDCliente) ON dbo.DatiVendite ;
+GO
+
+-- Now User 100 cannot insert record for IDCliente <> 100
+EXECUTE AS USER = 'User100'
+go
+
+insert into dbo.DatiVendite 
+values (200,1020);
+
+REVERT;
+
+
+-- disable the security policy
+ALTER SECURITY POLICY dbo.AccessoUserDati
+WITH (STATE = OFF);
+
+EXECUTE AS USER = 'User100'
+go
+
+select * from dbo.DatiVendite;
+
+REVERT;
 
 --- Cleaning 
 use master;
 
 DROP database RLSTest;
 GO
+
