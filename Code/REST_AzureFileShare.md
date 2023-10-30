@@ -20,13 +20,13 @@ Given the fact that you already have a storage account on Azure and a fileshare.
 
 You have to create the Shared Access Signature (SAS) token of the Storage Account with the following boxes checked
 
-![Alt text](../Asset/PermissionFileShare.png)
+![Alt text](../Assets/PermissionFileShare.png)
 
 Mind the fact that during the creation steps of the SAS token you will have to declare a *due date*. This is the reason why you will have to edit the following code.
 
 At the end of the generation process, copy the SAS token
 
-![Alt text](../Asset/SASFileShare.png)
+![Alt text](../Assets/SASFileShare.png)
 
 ## Example
 
@@ -116,7 +116,7 @@ select cast(@response as xml)
 ```
 
 This is the result of the previous lines if you open the file using Notepad++.
-![Alt text](../Asset/fileshareNotepad.png)
+![Alt text](../Assets/fileshareNotepad.png)
 The reason why we see the `NULL` characters is that the new string is much shorter than the one we used to create the file [here](#create-a-file).
 
 ### Read a file
