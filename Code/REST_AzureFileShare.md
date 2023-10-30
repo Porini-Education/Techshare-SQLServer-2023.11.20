@@ -36,7 +36,7 @@ Given the fact that in your database you already have created a `MASTER KEY`, yo
 
 
 ```SQL
--- Make sure a database master key exists if no, create it
+-- Make sure a database master key exists if not, create it
 if not exists(select * from sys.symmetric_keys where [name] = '##MS_DatabaseMasterKey##') 
 begin
     create master key encryption by password = 'PapaZulu33!'
