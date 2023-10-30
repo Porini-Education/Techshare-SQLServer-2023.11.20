@@ -26,9 +26,9 @@ As a first step we are going to set the service up.
 The deployment used the standard setup.
 
 Once the deploy is completed you should open the resource and go in the APIs section and *click* on the `+ Add API`:
-![Alt text](../Asset/APIsection.png)
+![Alt text](../Assets/APIsection.png)
 Select the generic HTTP model and provide the following settings to configure it
-![Alt text](../Asset/APIsettings.png)
+![Alt text](../Assets/APIsettings.png)
 
 During the setup of the API the most important information is the `web service URL`.
 As you can see from the previous example we are indicating just the root of the public API that will be wrapped in the Azure service.
@@ -47,7 +47,7 @@ To configure the action select the object *tassimilano* and follow the steps:
 2. select `+ Add operation`
 3. insert any kind of displayname you may wish and insert the correct navigation in the original public API. This navigation will be concatenated to the original web site we just configured in the steps above.
 
-![Alt text](../Asset/APIoperation.png)
+![Alt text](../Assets/APIoperation.png)
 
 Once you are done you can now decide to test the link in the Azure portal.
 
@@ -56,10 +56,10 @@ Once you are done you can now decide to test the link in the Azure portal.
 3. in this example we are not using any kind of parameters, otherwise we should compile all the required option
 4. Finally, you can *click* on `Send`.
 
-![Alt text](../Asset/APItest.png)
+![Alt text](../Assets/APItest.png)
 
 If the result is ```200``` then you are ready to test this in your Azure SQL database
-![Alt text](../Asset/APItestresult.png)
+![Alt text](../Assets/APItestresult.png)
 
 
 ## Azure SQL Database
@@ -76,7 +76,7 @@ Then create the `database scoped credential`.
 - This object's name should be our service's root name: the `Base URL` indicated during the [setting process](REST_Read_externalresources.md#api-management-service---setup). 
 For more details: follow the [Credential name rules](<https://learn.microsoft.com/en-gb/sql/relational-databases/system-stored-procedures/sp-invoke-external-rest-endpoint-transact-sql?view=azuresqldb-current&tabs=request-headers#credential-name-rules>).
 - The secret is the `subscription key` of the API Management Service. You should *click* on the ellipsis of the key you want to use, then on the `Show/hide keys` and finally copy one of the available keys.
-![Alt text](../Asset/APIsubscriptionkey.png)
+![Alt text](../Assets/APIsubscriptionkey.png)
 
 This is the code you should update,
 
