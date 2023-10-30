@@ -1,22 +1,26 @@
-# **Temporal Table** (system-versioned temporal tables)
+-- Temporal Table
 
-<https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables?view=sql-server-ver16>
+/*
+useful for
+	Auditing
+	Rebuilding the data in case of inadvertent changes
+	Projecting and reporting for historical trend analysis
+	Protecting the data in case of accidental data loss
+*/
 
-## Creation the temporal table
-
+/*
 The time table must have the following requirements:
 
 - must have a primary key
 - must 2 fields of type datetime2 declared GENERATED ALWAYS AS ROW START / END
 - a PERIOD SYSTEM_TIME attribute defined on the two datetime2 fields
 
-### Initial environmental cleaning
-
-``` SQL
+*/
 
 -- Set Active Database for testing
-Use Test
+use Test
 GO
+
 
 IF OBJECT_ID(N'dbo.Articles', N'U') IS NOT NULL
 BEGIN
@@ -25,12 +29,7 @@ BEGIN
  DROP TABLE IF EXISTS dbo.Articles, dbo.ArticlesHistory;
 END;
 
-```
-
-
-### Table creation
-
-``` SQL
+-- Table Creation
 create table dbo.Articles
 (
  IdArticle int not null CONSTRAINT PK_IdArticle PRIMARY KEY NONCLUSTERED,
@@ -45,11 +44,7 @@ WITH ( SYSTEM_VERSIONING = ON ( HISTORY_TABLE = dbo.ArticlesHistory ) ); -- the 
 ;
 GO
 
-```
-
-### Example of utilization
-
-``` SQL
+-- Example of utilization
 select * from dbo.Articles
 select * from dbo.ArticlesHistory
 
@@ -69,13 +64,7 @@ GO
 select * from dbo.Articles;
 select * from dbo.ArticlesHistory ;  -- date are stored in the UTC time zone
 GO
-```
 
-![Alt text](../Assets/Temporal_Select01.png)
-
-![Alt text](../Assets/Temporal_Select02.png)
-
-```SQL
 
 -- With for system_time all option all record actual and storical are retrieved
 
@@ -83,11 +72,7 @@ select *, DateStart,DateEnd
 from dbo.Articles for system_time all
 where IdArticle=2
 order by DateStart desc
-```
 
-![Alt text](../Assets/Temporal_Select03.png)
-
-```SQL
 
 update dbo.Articles set Price = Price + 50 where IdArticle in(2,3);
 GO
@@ -100,20 +85,8 @@ select *, DateStart,DateEnd from dbo.Articles for system_time all
 
 select * from dbo.ArticlesHistory -- the new article (Echo) is not present in historic table
 
-```
 
-![Alt text](../Assets/Temporal_Select04.png)
-
-the new article (Echo) is not present in historic table
-
-![Alt text](../Assets/Temporal_Select05.png)
-
-### Deleting table
-
-To delete a Temporal Table the system version must be set to off.
-Data table and Historical table must be delete separately
-
-```SQL
+-- Deleting Table
 IF OBJECT_ID(N'dbo.Articles', N'U') IS NOT NULL
 BEGIN
  IF OBJECTPROPERTY(OBJECT_ID(N'dbo.Articles', N'U'), N'TableTemporalType') = 2
@@ -121,11 +94,8 @@ BEGIN
  DROP TABLE IF EXISTS dbo.Articles, dbo.ArticlesHistory;
 END;
 GO
-```
 
-## Changing to a temporal table a table with historical data that exists
 
-```SQL
 
 -- Creation the table with historical data of example
 create table dbo.ArticlesHistory
@@ -189,30 +159,7 @@ ALTER TABLE dbo.Articles ALTER COLUMN DateEnd ADD HIDDEN;
 ALTER TABLE dbo.Articles
   SET ( SYSTEM_VERSIONING = ON ( HISTORY_TABLE = dbo.ArticlesHistory ) );
 GO
-```
 
-## Example of query on temporal query
-
-**The possible values for option FOR SYSTEM_TIME are:**
-
-- **AS OF** *date_time*: Returns the rows containing the values that were current at the specified point in time in the past. <u>ValidFrom <= date_time AND ValidTo > date_time</u>
-
-- **FROM** *start_date_time* **TO** *end_date_time*: Returns all the row versions that were active within the specified time range. 
-   <u>ValidFrom < end_date_time AND ValidTo > start_date_time</u>
-
-- **BETWEEN** *start_date_time* **AND** *end_date_time*: Returns all the row versions that were active within the specified time range except the table of rows returned includes rows that became active on the upper boundary defined by the end_date_time endpoint.
-<u>ValidFrom <= end_date_time AND ValidTo > start_date_time></u>
-
-- **CONTAINED IN** (start_date_time, end_date_time): Return all rows versions that were opened and closed within the specified time range defined by the two period values.
-<u>ValidFrom >= start_date_time AND ValidTo <= end_date_time</u>
-
-- **ALL** Returns all the rows, both current and historic
-
-If FOR SYSTEM_TIME is not indicated only current value are returned, like usual query on non temporal table.
-
-![Alt text](../Assets/Temporal_SystemTime.png)
-
-```SQL
 
 -- another update
 update dbo.Articles set Price = 8001 where IdArticle=1;
@@ -266,15 +213,11 @@ order by IdArticle, DateStart desc;
 
 select * from dbo.Articles for system_time as of '20220501 12:43:00';
 
-```
-
-### How to get time in the insertion time zone
-
+/*
 All dates and times in the Historic Table are recorded in UTC Time.
-
 To get data in the other time zone you could use AT TIME ZONE option
+*/
 
-```SQL
 -- List of Time Zone
 -- select * from sys.time_zone_info
 
@@ -297,10 +240,12 @@ select @momento;
 select * from dbo.Articles for system_time as of @momento;
 select * from dbo.Articles for system_time as of '20220501 12:43:00';
 
-```
 
-## Limitations of Temporal tables
+-- Cleanup finale
 
-- It is not possible to make a TRUNCATE
-- The data in the historical table can not be changed
-- It is not possible to add constraints to the historical table
+IF OBJECT_ID(N'dbo.Articles', N'U') IS NOT NULL
+BEGIN
+	IF OBJECTPROPERTY(OBJECT_ID(N'dbo.Articles', N'U'), N'TableTemporalType') = 2
+    ALTER TABLE dbo.Articles SET ( SYSTEM_VERSIONING = OFF );
+	DROP TABLE IF EXISTS dbo.Articles, dbo.ArticlesHistory;
+END;
