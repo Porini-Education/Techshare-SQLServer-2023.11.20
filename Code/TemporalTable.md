@@ -1,6 +1,17 @@
 # **Temporal Table** (system-versioned temporal tables)
 
-<https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables?view=sql-server-ver16>
+[Documentation Microsoft Docs](https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables)
+
+- [**Temporal Table** (system-versioned temporal tables)](#temporal-table-system-versioned-temporal-tables)
+  - [Creation the temporal table](#creation-the-temporal-table)
+    - [Initial environmental cleaning](#initial-environmental-cleaning)
+    - [Table creation](#table-creation)
+    - [Example of utilization](#example-of-utilization)
+    - [Deleting table](#deleting-table)
+  - [Changing to a temporal table a table with historical data that exists](#changing-to-a-temporal-table-a-table-with-historical-data-that-exists)
+  - [Example of query on temporal query](#example-of-query-on-temporal-query)
+    - [How to get time in the insertion time zone](#how-to-get-time-in-the-insertion-time-zone)
+  - [Limitations of Temporal tables](#limitations-of-temporal-tables)
 
 ## Creation the temporal table
 
