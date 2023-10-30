@@ -116,7 +116,9 @@ select cast(@response as xml)
 ```
 
 This is the result of the previous lines if you open the file using Notepad++.
+
 ![Alt text](../Assets/fileshareNotepad.png)
+
 The reason why we see the `NULL` characters is that the new string is much shorter than the one we used to create the file [here](#create-a-file).
 
 ### Read a file
