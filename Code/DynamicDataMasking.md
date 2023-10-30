@@ -1,6 +1,10 @@
 
 # Dynamic Data Masking Example
 
+The purpose of dynamic data masking is to limit exposure of sensitive data, preventing users who shouldn't have access to the data from viewing it. Dynamic data masking doesn't aim to prevent database users from connecting directly to the database and running exhaustive queries that expose pieces of the sensitive data. Dynamic data masking is complementary to other SQL Server security features (auditing, encryption, row level security, etc.) and it's highly recommended to use it with them in order to better protect the sensitive data in the database
+
+Administrative users or roles such as sysadmin, serveradmin or db_owner has CONTROL permission on the database by design and can view unmasked data.
+
 [Documentation Microsoft Docs](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking)
 
 - [Dynamic Data Masking Example](#dynamic-data-masking-example)
@@ -8,11 +12,12 @@
   - [Query the data](#query-the-data)
   - [More Data Masking option](#more-data-masking-option)
     - [Limitations](#limitations)
+    - [DROP DYNAMIC DATA MASK](#drop-dynamic-data-mask)
     - [GRANT UNMASK](#grant-unmask)
   - [Cleaning operation](#cleaning-operation)
 
-
 ## Environment setup
+
 ```SQL
 Use master
 GO
@@ -38,7 +43,7 @@ create table dbo.Employees
  City varchar(50),
  CreditCard varchar(20) MASKED WITH (FUNCTION = 'partial(0,"XXXX-XXXX-XXXX-",4)'),
  MobileNumber varchar(20),
- Income numeric (8,2),
+ Income numeric (8,2) MASKED WITH (FUNCTION = 'default()'),
  Email varchar(50)  MASKED WITH (FUNCTION = 'email()'),
  Code int
  );
@@ -49,7 +54,7 @@ values
 ('Topolino','Paris','1234-9993-5643-1122','33987633',1200.56,'topo.lino@outlook.com',120),
 ('Pluto','Palermo','1234-3327-5643-1122','365487600',6210.88,'pluto.roger@outlook.it',345),
 ('Pippo','Catania','3345-2244-7832-1122','22398764',9200.00,'pippo.ciccio@gmail.com',1234),
-('Poldo','Boston','2188-6678-9127-4385','451788',15600.00,'poldo@porini.com',5532)
+('Poldo','Boston','2188-6678-9127-4385','451788',15600.00,'poldo@acme.com',5532)
 ;
 GO
 ```
@@ -80,6 +85,7 @@ GO
 -- Add the user to the reading role in the database 
 EXEC sp_addrolemember 'db_datareader', 'User100'; 
 GO  
+
 /*
 -- if you want to test also with the writing role
 EXEC sp_addrolemember 'db_datawriter', 'User100'; 
@@ -134,6 +140,14 @@ Revert
 GO
 select  USER_NAME();
 GO
+```
+
+### DROP DYNAMIC DATA MASK
+
+```SQL
+ALTER TABLE dbo.Employees
+ALTER COLUMN Email DROP MASKED;
+
 ```
 
 ### GRANT UNMASK
