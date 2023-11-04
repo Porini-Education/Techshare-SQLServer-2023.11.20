@@ -56,3 +56,40 @@ FROM
 ORDER BY
     momento
 ;
+
+
+-- FIRST_VALUE, LAST_VALUE ==> IGNORE NULLS | RESPECT NULLS
+
+
+-- example data
+drop table if exists #ExampleDate;
+GO
+
+
+SELECT Id,Gruppo, Valore
+into #ExampleDate
+FROM (VALUES 
+(1,'A', 20.3), (2,'B', 22.1), (3,null,4.5), (4,'C', 8.2), 
+(5,'D', 10.6) ,(6,null, 19.3),(7,null, 14.6),(8,'E',22.6)
+) AS t (Id,Gruppo, Valore)
+;
+
+select * from #ExampleDate;
+
+-- IGNORE NULLS: if null the previous value is used (dragging)
+select
+       Id,Gruppo, Valore,
+       last_value(Gruppo) IGNORE NULLS 
+	   over (order by Id rows between unbounded preceding and current row) as GruppoCalcolato
+from 
+	#ExampleDate
+order by Id
+
+-- RESPECT NULLS: if null value is not calculated
+	select
+       Id,Gruppo, Valore,
+       last_value(Gruppo) RESPECT NULLS 
+	   over (order by Id rows between unbounded preceding and current row) as GruppoCalcolato
+from 
+	#ExampleDate
+order by Id
