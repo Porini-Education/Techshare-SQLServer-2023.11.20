@@ -93,3 +93,109 @@ order by Id
 from 
 	#ExampleDate
 order by Id
+
+
+-- GREATEST, LEAST
+
+select 
+	LEAST ('Alfa','Zulu','Bravo','Golf') as Least1,
+	GREATEST ('Alfa','Zulu','Bravo','Golf') as Greatest1,
+	LEAST (5,8,3) as Least2,
+	GREATEST (5,8,3) as Greatest2
+	;
+GO
+
+declare @d1 date = '20220703';
+declare @d2 date = '20220204';
+declare @d3 date = '20210723';
+declare @d4 date = '20221213';
+
+select LEAST (@d1,@d2,@d3,@d4),GREATEST(@d1,@d2,@d3,@d4);
+
+-- The scale of the return type is determined by the scale of the argument with the highest precedence data type
+SELECT 
+	LEAST('6.62', 3.1415, N'7') AS LeastVal, 
+	GREATEST('6.62', 3.1415, N'7') AS GreatVal; 
+GO
+
+
+-- TRIM, LTRIM, RTRIM
+
+-- New sintax with string to remove
+SELECT TRIM( 'xyz' from 'xz1111111xyzxyz' )  -- default before and after
+
+SELECT TRIM(LEADING 'xyz' from 'xz1111111xyzxyz')    -- remove at beginning
+SELECT TRIM(TRAILING  'xyz' from 'xz1111111xyzxyz')  -- remove ad the end
+SELECT TRIM(BOTH  'xyz' from 'xz1111111xyzxyz')      -- remove at the beginning and at the end
+
+select TRIM(TRAILING 'euro' from '12345Euro')
+
+-- Old syntax without indicating the characters to remove. In this case the blanks will be removed
+select trim (' kk ')  -- ==> 'kk'
+
+
+SELECT 
+	'xz1111111xyzxyz' as [Original Value],
+	TRIM( 'xyz' from 'xz1111111xyzxyz' ) as [Default], -- default: before and after
+	TRIM(LEADING 'xyz' from 'xz1111111xyzxyz') as [LEADING],  -- remove at beginning
+	TRIM(TRAILING  'xyz' from 'xz1111111xyzxyz') as [TRAILING], -- remove ad the end
+	TRIM(BOTH  'xyz' from 'xz1111111xyzxyz')  as [BOTH] -- remove at the beginning and at the end
+	;
+
+select TRIM(TRAILING 'euro' from '12345Euro') as [Value]
+
+
+--JSON_OBJECT
+
+SELECT JSON_OBJECT('Color':'rosso', 'Price':120, 'size':3,'Stock':null) as 'Example1';
+SELECT JSON_OBJECT('Color':'rosso', 'Price':120, 'size':3,'Stock':null NULL ON NULL) as 'Example2';
+SELECT JSON_OBJECT('Color':'rosso', 'Price':120, 'size':3,'Stock':null ABSENT ON NULL) as 'Example3';
+
+
+-- Example Data
+with cteExampleData as
+(
+SELECT Id,Gruppo, Valore
+FROM (VALUES 
+(1,'A', 20.3), (2,'B', 22.1), (3,null,4.5), (4,'C', 8.2), 
+(5,'D', 10.6) ,(6,null, 19.3),(7,null, 14.6),(8,'E',22.6)
+) AS t (Id,Gruppo, Valore)
+)
+
+select JSON_OBJECT( 'Id':a.Id, 'Gruppo':a.Gruppo,'Valore':a.Valore)
+from cteExampleData a
+;
+
+-- JSON_ARRAY: generates a Json Array based on the parameters provided
+
+select JSON_ARRAY ('alfa','bravo','charlie') as Valori;
+GO
+
+-- dati di esempio 
+with cteArea as
+(
+SELECT Gruppo, Valore
+FROM (VALUES 
+('Alfa', 20.3), ('Bravo', 22.1), ('Charlie', 8.2), 
+('Delta', 10.6) ,('Echo', 19.3),('Foxtrot', 14.6)
+) AS a (Gruppo, Valore)
+),
+cteNegozi as
+(
+SELECT Gruppo, Negozio
+FROM (VALUES 
+('Alfa', 'N01'),('Alfa', 'N02'),('Alfa', 'N03'),('Bravo', 'N04'),('Bravo', 'N05'),
+('Charlie', 'N06'),('Delta', 'N07'),('Delta', 'N08')
+) as b (Gruppo, Negozio)
+)
+
+select 
+	JSON_OBJECT( 'Gruppo':n.Gruppo, 'Valore':a.Valore,'Negozi':JSON_ARRAY(string_Agg(n.Negozio,','))) as JsonData,
+	n.Gruppo,
+	a.Valore,
+	JSON_ARRAY(string_Agg(n.Negozio,',')) as Negozi
+from cteArea a
+	inner join 	cteNegozi n 
+	on a.Gruppo =n.Gruppo
+group by n.Gruppo,a.Valore
+;
