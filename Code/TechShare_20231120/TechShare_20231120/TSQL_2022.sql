@@ -199,3 +199,34 @@ from cteArea a
 	on a.Gruppo =n.Gruppo
 group by n.Gruppo,a.Valore
 ;
+
+
+-- DATETRUNC
+
+DECLARE @d datetime2 = '2021-12-08 11:30:15.1234567';
+SELECT 
+'Year' = DATETRUNC(year, @d),
+ 'Quarter'= DATETRUNC(quarter, @d),
+ 'Month'= DATETRUNC(month, @d),
+ 'Week'= DATETRUNC(week, @d), -- Using the default DATEFIRST setting value of 7 (U.S. English)
+ 'Iso_week' = DATETRUNC(iso_week, @d),
+ 'DayOfYear'= DATETRUNC(dayofyear, @d),
+ 'Day' = DATETRUNC(day, @d);
+
+ select
+ 'Hour'= DATETRUNC(hour, @d),
+ 'Minute'= DATETRUNC(minute, @d),
+ 'Second'= DATETRUNC(second, @d),
+ 'Millisecond' = DATETRUNC(millisecond, @d),
+ 'Microsecond'= DATETRUNC(microsecond, @d);
+
+ -- The week number depends by value of DATEFIRST option
+DECLARE @d date = '20230502';
+
+SELECT 'Week-7', DATETRUNC(week, @d); -- Uses the default DATEFIRST setting value of 7 SUNDAY (U.S. English)
+
+SET DATEFIRST 1;  --- Monday
+SELECT 'Week-1', DATETRUNC(week, @d);
+
+SET DATEFIRST 3; -- Wednesday
+SELECT 'Week-3', DATETRUNC(week, @d);
