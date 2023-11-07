@@ -2,12 +2,16 @@
 # Elastic Job
 
  <https://www.sqlshack.com/elastic-jobs-in-azure-sql-database/>
+ 
  <https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-jobs-overview>
+ 
  <https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-jobs-tsql-create-manage>
+ 
  <https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-add-jobstep-transact-sql>
+ 
  <https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-jobs-powershell-create>
 
-## Creation of demo environment
+## Creation of demo environment (with Powershell)
 
 <https://github.com/Huachao/azure-content/blob/master/articles/sql-database/sql-database-elastic-jobs-powershell.md>
 
