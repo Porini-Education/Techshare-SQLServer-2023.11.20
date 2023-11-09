@@ -264,8 +264,6 @@ Resources created
 ## Creation SQL Logins of demo environment (with Powershell)
 
 ``` Powershell
-    
-
 # Creation
 # User Database Credentials
 $MasterUserLogin = 'MasterUser';
@@ -298,10 +296,14 @@ Invoke-Sqlcmd -Query $q_createJobLogin -ServerInstance $Server01 -Database "mast
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server01 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server01 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 
+Write-Host ' Server1 - Master Logins created' -ForegroundColor Green
+
 # Server 1 - db00
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server01 -Database "db00" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server01 -Database "db00" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_addrolemember -ServerInstance $Server01 -Database "db00" -Username $sqlAdminLogin -Password $sqlAdminPassword
+
+Write-Host ' Server1 - DB00 Logins created' -ForegroundColor Green
 
 
 # Server 2 - Master
@@ -310,10 +312,14 @@ Invoke-Sqlcmd -Query $q_createJobLogin -ServerInstance $Server02 -Database "mast
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server02 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server02 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 
+Write-Host ' Server2 - Master Logins created' -ForegroundColor Green
+
 # Server 2 - db01
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server02 -Database "db01" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server02 -Database "db01" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_addrolemember -ServerInstance $Server02 -Database "db01" -Username $sqlAdminLogin -Password $sqlAdminPassword
+
+Write-Host ' Server2 - DB01 Logins created' -ForegroundColor Green
 
 
 # Server 2 - db02
@@ -321,25 +327,33 @@ Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server02 -Database "db
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server02 -Database "db02" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_addrolemember -ServerInstance $Server02 -Database "db02" -Username $sqlAdminLogin -Password $sqlAdminPassword
 
+Write-Host ' Server2 - DB02 Logins created' -ForegroundColor Green
+
 # Server 3 - master
 Invoke-Sqlcmd -Query $q_createMasterLogin -ServerInstance $Server03 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobLogin -ServerInstance $Server03 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server03 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server03 -Database "master" -Username $sqlAdminLogin -Password $sqlAdminPassword
 
+Write-Host ' Server3 - Master Logins created' -ForegroundColor Green
+
+
 # Server 3 - db03
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server03 -Database "db03" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server03 -Database "db03" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_addrolemember -ServerInstance $Server03 -Database "db03" -Username $sqlAdminLogin -Password $sqlAdminPassword
+
+Write-Host ' Server3 - DB03 Logins created' -ForegroundColor Green
 
 # Server 3 - db04
 Invoke-Sqlcmd -Query $q_createMasterUser -ServerInstance $Server03 -Database "db04" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_createJobUser -ServerInstance $Server03 -Database "db04" -Username $sqlAdminLogin -Password $sqlAdminPassword
 Invoke-Sqlcmd -Query $q_addrolemember -ServerInstance $Server03 -Database "db04" -Username $sqlAdminLogin -Password $sqlAdminPassword
 
+Write-Host ' Server3 - DB04 Logins created' -ForegroundColor Green
  ```
 
-## Demo
+## Demo (group of databases)
 
  ``` SQL
 -- Connection to Master Shards: Server0 - DB00
@@ -381,12 +395,12 @@ EXEC jobs.sp_add_target_group_member
 
 -- remove db04 from the group
 EXEC jobs.sp_add_target_group_member 
-	N'ShardDatabase',
-	@target_type = N'SqlDatabase',
-	@membership_type = N'Exclude',
-	@server_name ='poriniedusqlserver-elastic02.database.windows.net',
-	@database_name = N'db04'
-	;
+    N'ShardDatabase',
+    @target_type = N'SqlDatabase',
+    @membership_type = N'Exclude',
+    @server_name ='poriniedusqlserver-elastic02.database.windows.net',
+    @database_name = N'db04'
+;
 
 -- check
 SELECT * FROM jobs.target_groups;
@@ -408,12 +422,12 @@ GO
 
 EXEC jobs.sp_add_jobstep @job_name = 'ElasticJob01',
 @command = 
-	'IF NOT EXISTS (SELECT name FROM sys.tables WHERE name =''ElasticJob'')
-	CREATE TABLE dbo.ElasticJob
-	(ID INT IDENTITY,
-	CurrentDateTime DateTime,
-	Description VARCHAR(50)
-	)',
+    'IF NOT EXISTS (SELECT name FROM sys.tables WHERE name =''ElasticJob'')
+    CREATE TABLE dbo.ElasticJob
+    (ID INT IDENTITY,
+    CurrentDateTime DateTime,
+    Description VARCHAR(50)
+    )',
  @credential_name = 'JobExecution',
  @target_group_name= 'ShardDatabase';
 
@@ -437,13 +451,13 @@ FROM jobs.jobsteps
 EXEC jobs.sp_start_job 'ElasticJob01'
 
 -- monitoring
-SELECT	job_name,
-		start_time,
-		last_message, 
-		target_server_name,
-		target_database_name 
+SELECT job_name,
+    start_time,
+    last_message, 
+    target_server_name,
+    target_database_name 
 FROM 
-		jobs.job_executions
+    jobs.job_executions
 order by start_time desc
 ;
 
@@ -471,13 +485,13 @@ EXEC jobs.sp_update_job @job_name = 'ElasticJob01',
 @schedule_interval_count = 1
 
 -- monitoring
-SELECT	job_name,
-		start_time,
-		last_message, 
-		target_server_name,
-		target_database_name 
+SELECT job_name,
+    start_time,
+    last_message, 
+    target_server_name,
+    target_database_name 
 FROM 
-		jobs.job_executions
+    jobs.job_executions
 order by start_time desc
 ;
 
@@ -487,6 +501,92 @@ EXEC jobs.sp_update_job @job_name = 'ElasticJob01',
 ;
 ```
 
+## Demo (Elastic Pool)
+
+``` SQL
+
+-- Target Group ON Elastic Pool
+
+-- PREREQUISITE: Create Elastic Pool dbpool02
+
+-- Adding DB03 and DB04 to Elastic Pool dbpool02
+
+ -- ************* Execute on master of Server 3 poriniedusqlserver-elastic02  
+ ALTER DATABASE db03
+ MODIFY ( SERVICE_OBJECTIVE = ELASTIC_POOL ( name = dbpool02)) ; 
+
+ ALTER DATABASE db04
+ MODIFY ( SERVICE_OBJECTIVE = ELASTIC_POOL ( name = dbpool02)) ; 
+
+
+-- ************* Execute on Master Shards: Server0 - DB00
+
+-- creation of the Job group
+EXEC jobs.sp_add_target_group 'PoolGroup02'
+
+-- adding databases
+EXEC jobs.sp_add_target_group_member 
+    @target_group_name = 'PoolGroup02',
+    @target_type = 'SqlElasticPool',
+    @refresh_credential_name = 'MasterUser',
+    @server_name ='poriniedusqlserver-elastic02.database.windows.net',
+    @elastic_pool_name = 'dbpool02'
+    ;
+GO
+-- creaation of the Job
+EXEC jobs.sp_add_job @job_name ='ElasticJob02', 
+    @description ='Test Elastic Job Pool'
+
+EXEC jobs.sp_add_jobstep @job_name = 'ElasticJob02',
+@command = 
+'IF NOT EXISTS (SELECT name FROM sys.tables WHERE name =''ElasticJob2'')
+CREATE TABLE ElasticJob2
+(ID INT IDENTITY,
+CurrentDateTime DateTime,
+Description VARCHAR(50)
+)',
+ @credential_name = 'JobExecution',
+ @target_group_name= 'PoolGroup02';
+ GO
+ --- Aggiungo step
+EXEC jobs.sp_add_jobstep @job_name = 'ElasticJob02',
+@command = 
+'INSERT INTO ElasticJob2
+(CurrentDateTime,Description)
+VALUES
+(GETDATE(),''Pool'')',
+@step_name = 'Step 2',
+@credential_name = 'JobExecution',
+@target_group_name = 'PoolGroup02'
+;
+GO
+
+ -- job execution
+EXEC jobs.sp_start_job 'ElasticJob02'
+
+-- monitoring
+SELECT job_name,
+        start_time,
+        last_message, 
+        target_server_name,
+        target_database_name 
+FROM 
+        jobs.job_executions
+order by start_time desc
+;
+
+-- check
+SELECT * FROM jobs.jobsteps;
+
+-- Deleting Jobs
+EXEC jobs.sp_delete_job @job_name='ElasticJob01';
+EXEC jobs.sp_delete_job @job_name='ElasticJob02', @force = 1;
+
+-- Deleting Groups
+exec jobs.sp_delete_target_group  @target_group_name = 'ShardDatabase'
+exec jobs.sp_delete_target_group  @target_group_name = 'PoolGroup02'
+
+```
 
 
 ## Final Cleaning
