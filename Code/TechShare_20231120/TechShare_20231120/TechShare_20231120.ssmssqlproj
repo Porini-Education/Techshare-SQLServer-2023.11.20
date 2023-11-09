@@ -3,10 +3,10 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost:AzureAD\FrancoPigoli">
-          <Created>2023-11-04T17:38:20.3608508+01:00</Created>
+        <ConnectionNode Name="P-MBESHARA:AzureAD\MatteoBeshara">
+          <Created>2023-11-09T17:18:29.1241169+01:00</Created>
           <Type>SQL</Type>
-          <Server>localhost</Server>
+          <Server>P-MBESHARA</Server>
           <UserName />
           <Authentication>Windows Authentication</Authentication>
           <InitialDB />
@@ -24,6 +24,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>DynamicDataMasking.sql</FullPath>
+        </FileNode>
+        <FileNode Name="GraphDB_SocialModel.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:P-MBESHARA:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>P-MBESHARA</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>GraphDB_SocialModel.sql</FullPath>
         </FileNode>
         <FileNode Name="REST_AzureContainer.sql">
           <AssociatedConnectionMoniker />
@@ -56,8 +62,8 @@
           <FullPath>TemporalTable.sql</FullPath>
         </FileNode>
         <FileNode Name="TSQL_2022.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>TSQL_2022.sql</FullPath>
         </FileNode>
