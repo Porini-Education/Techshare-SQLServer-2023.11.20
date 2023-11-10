@@ -578,6 +578,13 @@ order by start_time desc
 -- check
 SELECT * FROM jobs.jobsteps;
 
+```
+
+
+## Final Cleaning
+
+  ``` SQL
+
 -- Deleting Jobs
 EXEC jobs.sp_delete_job @job_name='ElasticJob01';
 EXEC jobs.sp_delete_job @job_name='ElasticJob02', @force = 1;
@@ -585,19 +592,6 @@ EXEC jobs.sp_delete_job @job_name='ElasticJob02', @force = 1;
 -- Deleting Groups
 exec jobs.sp_delete_target_group  @target_group_name = 'ShardDatabase'
 exec jobs.sp_delete_target_group  @target_group_name = 'PoolGroup02'
-
-```
-
-
-## Final Cleaning
-
-  ``` SQL
---Deleting Jobs
-EXEC jobs.sp_delete_job @job_name='ElasticJob01';
-EXEC jobs.sp_delete_job @job_name='ElasticJob02', @force = 1;
-
--- Deleting Groups
-exec jobs.sp_delete_target_group  @target_group_name =  'PoolGroup02'
  
  ```
 
