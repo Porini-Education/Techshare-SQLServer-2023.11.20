@@ -15,5 +15,6 @@ Curated by **Porini Education** <img src="/Assets/RGB_Badge_PIRC.png" width=110p
 |[REST Azure FileShare](/Code/REST_AzureFileShare.md)| How to deal with an Azure File Share: create, load, read, delete a file|
 |[REST all endpoint](/Code/REST_ExternalResources.md)| How to reach any endpoint outside of the Azure infrastructure |
 |[New TSQL Functions in SQL 2022](/Code/TSQL-2022.md) | What's new in SQL Server 2022 |
+|[Elastic Job](/Code/ElasticJob.md) | Elastic Job: a way to run periodically scheduled Transact-SQL (T-SQL) queries and perform maintenance tasks against one or many Azure SQL databases |
 |||
 |[SOLUTIONS](/Code/TechShare_20231120/)|Visual Studio Solution with example code |
