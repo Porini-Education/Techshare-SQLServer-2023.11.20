@@ -2,20 +2,7 @@
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="TechShare_20231120">
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items>
-        <ConnectionNode Name="P-MBESHARA:AzureAD\MatteoBeshara">
-          <Created>2023-11-09T17:18:29.1241169+01:00</Created>
-          <Type>SQL</Type>
-          <Server>P-MBESHARA</Server>
-          <UserName />
-          <Authentication>Windows Authentication</Authentication>
-          <InitialDB />
-          <LoginTimeout>30</LoginTimeout>
-          <ExecutionTimeout>0</ExecutionTimeout>
-          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
-          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
-        </ConnectionNode>
-      </Items>
+      <Items />
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
@@ -25,17 +12,29 @@
           <AssociatedConnUserName />
           <FullPath>DynamicDataMasking.sql</FullPath>
         </FileNode>
+        <FileNode Name="ElasticJob.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>ElasticJob.sql</FullPath>
+        </FileNode>
         <FileNode Name="GraphDB_ShortestPath.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:P-MBESHARA:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>P-MBESHARA</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>GraphDB_ShortestPath.sql</FullPath>
         </FileNode>
         <FileNode Name="GraphDB_SocialModel.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:P-MBESHARA:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>P-MBESHARA</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>GraphDB_SocialModel.sql</FullPath>
+        </FileNode>
+        <FileNode Name="GraphTable_Performances.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>GraphTable_Performances.sql</FullPath>
         </FileNode>
         <FileNode Name="REST_AzureContainer.sql">
           <AssociatedConnectionMoniker />
@@ -76,7 +75,14 @@
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
-      <Items />
+      <Items>
+        <FileNode Name="Setup_ElasticJob.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Setup_ElasticJob.txt</FullPath>
+        </FileNode>
+      </Items>
     </LogicalFolder>
   </Items>
 </SqlWorkbenchSqlProject>

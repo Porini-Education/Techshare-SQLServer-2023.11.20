@@ -1,6 +1,18 @@
 
 # Elastic Job
 
+
+- [Elastic Job](#elastic-job)
+  - [Link to resource](#link-to-resource)
+  - [Creation Azure Resources of demo environment (with Powershell)](#creation-azure-resources-of-demo-environment-with-powershell)
+  - [Creation SQL Logins of demo environment (with Powershell)](#creation-sql-logins-of-demo-environment-with-powershell)
+  - [Demo (group of databases)](#demo-group-of-databases)
+  - [Demo (Elastic Pool)](#demo-elastic-pool)
+  - [Final Cleaning](#final-cleaning)
+
+
+## Link to resource
+
  <https://www.sqlshack.com/elastic-jobs-in-azure-sql-database/>
  
  <https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-jobs-overview>
@@ -276,8 +288,6 @@ $Server01 = $virtualServer1 + ".database.windows.net"
 $Server02 = $virtualServer2 + ".database.windows.net"
 $Server03 = $virtualServer3 + ".database.windows.net"
 
-
-# Creation Login and user on all Databases
 
 # Creation Login and user on all Databases
 
@@ -596,8 +606,6 @@ exec jobs.sp_delete_target_group  @target_group_name = 'PoolGroup02'
  ```
 
  ``` Powershell
-# Creation of demo environment for Elastic Job
-
  # Deleting resources
     Remove-AzResourceGroup -Name $resourceGroupTarget -Force
  ```
