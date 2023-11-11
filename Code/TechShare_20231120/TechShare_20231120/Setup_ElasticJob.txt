@@ -28,7 +28,7 @@ Function Get-OKGoOn
        [parameter(Mandatory=$true)] [string] $nomeRisorsa
      )
 
-   $domanda = "{0} {1} gi‡ esistente. Proseguo ? (yes,no)"  -f $tipoRisorsa, $nomeRisorsa
+   $domanda = "{0} {1} gi√† esistente. Proseguo ? (yes,no)"  -f $tipoRisorsa, $nomeRisorsa
    $scelta = Read-Host $domanda
    if ($scelta -ne 'yes') {return 'NO'}
    if ($scelta -eq 'yes') {return 'YES'}
@@ -132,7 +132,7 @@ Function New-AzureDB
 }
 
 # Connection to Azure
-Connect-AzAccount -Tenant f94c319b-4158-443e-a71f-ebab86508687 -SubscriptionId $SubscriptionId†
+# Connect-AzAccount -Tenant xxxx -SubscriptionId xxxx
 
 
 
@@ -155,7 +155,7 @@ Connect-AzAccount -Tenant f94c319b-4158-443e-a71f-ebab86508687 -SubscriptionId $
 
    if($Flag -ne 0) 
    {
-       $scelta = Read-Host "Resource group  $resourceGroupTarget gi‡ esistente. Proseguo ? (yes,no)"
+       $scelta = Read-Host "Resource group  $resourceGroupTarget gi√† esistente. Proseguo ? (yes,no)"
        if ($scelta -ne 'yes') {return}
    }
 
