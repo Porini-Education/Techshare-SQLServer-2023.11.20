@@ -26,8 +26,8 @@
 ## Creation Azure Resources of demo environment (with Powershell)
 
 Module used:
-
-- az.sql
+- Az.Sql
+- Az.Resources
 
 <https://github.com/Huachao/azure-content/blob/master/articles/sql-database/sql-database-elastic-jobs-powershell.md>
 
@@ -175,8 +175,8 @@ Function New-AzureDB
     return $Esiste
 }
 
-# Connection to Azure
-Connect-AzAccount -Tenant f94c319b-4158-443e-a71f-ebab86508687 -SubscriptionId $SubscriptionId 
+# Connection to Azure (SubscriptionId is necessary if you have multiple subscriptions in your tenants)
+Connect-AzAccount -Tenant xxxxx -SubscriptionId xxxxx 
 
 
 
