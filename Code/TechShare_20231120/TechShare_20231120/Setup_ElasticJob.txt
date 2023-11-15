@@ -2,8 +2,8 @@
 # *** Creation of demo environment for Elastic Job
 
 # parameters 
-$tenantid = 'f94c319b-4158-443e-a71f-ebab86508687'
-$subscriptionId = '2456bd8c-7ce3-4a81-9a96-847fe17f01f2'
+$tenantid = xxxx
+$subscriptionId = xxxx
 $resourceGroupTarget ='PoriniSqlEdu02'
 $location = "NorthEurope"
 
