@@ -26,6 +26,7 @@
 ## Creation Azure Resources of demo environment (with Powershell)
 
 Module used:
+
 - Az.Sql
 - Az.Resources
 

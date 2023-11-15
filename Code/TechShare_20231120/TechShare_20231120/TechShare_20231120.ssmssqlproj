@@ -6,6 +6,12 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
+        <FileNode Name="CrossAzureDbQuery.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>CrossAzureDbQuery.sql</FullPath>
+        </FileNode>
         <FileNode Name="DynamicDataMasking.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
@@ -76,6 +82,12 @@
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
       <Items>
+        <FileNode Name="Setup_CrossAzureDbQuery.txt">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>Setup_CrossAzureDbQuery.txt</FullPath>
+        </FileNode>
         <FileNode Name="Setup_ElasticJob.txt">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
