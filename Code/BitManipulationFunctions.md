@@ -86,7 +86,7 @@ select convert(int, 0xF) as DecimalValue, BIT_COUNT (0xF) as Count_BitSetTo1;
 
 ![Alt text](../Assets/Bit_Count01.png)
 
-## DEMO: GET_BIT SET_BIT
+## DEMO: GET_BIT, SET_BIT
 
 To the bit manipulation functions, bits are numbered from right to left, with bit 0 being the rightmost and the smallest and bit 7 being the leftmost and largest.
 
