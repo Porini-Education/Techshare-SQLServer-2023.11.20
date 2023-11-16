@@ -6,6 +6,12 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
+        <FileNode Name="BitManupulationFunctions.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>BitManupulationFunctions.sql</FullPath>
+        </FileNode>
         <FileNode Name="CrossAzureDbQuery.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
@@ -65,6 +71,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>RowLevelSecurity.sql</FullPath>
+        </FileNode>
+        <FileNode Name="SQLQuery1.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>SQLQuery1.sql</FullPath>
         </FileNode>
         <FileNode Name="TemporalTable.sql">
           <AssociatedConnectionMoniker />
