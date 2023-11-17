@@ -162,3 +162,40 @@ select
 from #BitValue
 ;
 
+---- RIGHT_SHIFT, LEFT_SHIFT
+
+-- growth by powers of 2
+SELECT	
+	LEFT_SHIFT(1, 1),
+	LEFT_SHIFT(1, 2),
+	LEFT_SHIFT(1, 3),
+	LEFT_SHIFT(1, 4),
+	LEFT_SHIFT(1, 5)
+	;
+
+-- doubling of the value
+SELECT	
+	LEFT_SHIFT(7, 1),
+	LEFT_SHIFT(8, 1),
+	LEFT_SHIFT(9, 1),
+	LEFT_SHIFT(10, 1),
+	LEFT_SHIFT(13, 1)
+	;
+
+	-- multiply by powers of 2
+SELECT	
+	LEFT_SHIFT(7, 1), -- 2 * 7
+	LEFT_SHIFT(7, 2), -- 4 * 7
+	LEFT_SHIFT(7, 3), -- 8 * 7
+	LEFT_SHIFT(7,4),  -- 16 * 7
+	LEFT_SHIFT(13,5)  -- 2**5 = 32 * 13 ==> 416
+	;
+
+	-- dividing by powers of 2
+SELECT	
+	RIGHT_SHIFT(100, 1),  -- 100 / 2
+	RIGHT_SHIFT(100, 2),  -- 100 / 4
+	RIGHT_SHIFT(100, 3),  -- 100 / 8
+	RIGHT_SHIFT(100, 4),  -- 100 / 16  (6.25 ==> 6)
+	RIGHT_SHIFT(31, 2)    -- 31 / 4  (7.75 ==> 7)
+	;

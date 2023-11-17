@@ -72,11 +72,11 @@
           <AssociatedConnUserName />
           <FullPath>RowLevelSecurity.sql</FullPath>
         </FileNode>
-        <FileNode Name="SQLQuery1.sql">
+        <FileNode Name="SQLQuery3.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
-          <FullPath>SQLQuery1.sql</FullPath>
+          <FullPath>SQLQuery3.sql</FullPath>
         </FileNode>
         <FileNode Name="TemporalTable.sql">
           <AssociatedConnectionMoniker />
