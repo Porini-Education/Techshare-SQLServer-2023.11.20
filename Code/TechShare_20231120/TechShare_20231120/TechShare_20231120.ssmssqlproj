@@ -72,12 +72,6 @@
           <AssociatedConnUserName />
           <FullPath>RowLevelSecurity.sql</FullPath>
         </FileNode>
-        <FileNode Name="SQLQuery3.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>SQLQuery3.sql</FullPath>
-        </FileNode>
         <FileNode Name="TemporalTable.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />

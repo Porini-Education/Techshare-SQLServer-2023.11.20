@@ -124,25 +124,14 @@ GO
 -- New sintax with string to remove
 SELECT TRIM( 'xyz' from 'xz1111111xyzxyz' )  -- default before and after
 
-SELECT TRIM(LEADING 'xyz' from 'xz1111111xyzxyz')    -- remove at beginning
-SELECT TRIM(TRAILING  'xyz' from 'xz1111111xyzxyz')  -- remove ad the end
-SELECT TRIM(BOTH  'xyz' from 'xz1111111xyzxyz')      -- remove at the beginning and at the end
+SELECT TRIM(LEADING ('xyz') from 'xz1111111xyzxyz')    -- remove at beginning
+SELECT TRIM(TRAILING ('xyz') from 'xz1111111xyzxyz')  -- remove ad the end
+SELECT TRIM(BOTH  ('xyz') from 'xz1111111xyzxyz')      -- remove at the beginning and at the end
 
-select TRIM(TRAILING 'euro' from '12345Euro')
+select TRIM(TRAILING ('euro') from '12345Euro')
 
 -- Old syntax without indicating the characters to remove. In this case the blanks will be removed
 select trim (' kk ')  -- ==> 'kk'
-
-
-SELECT 
-	'xz1111111xyzxyz' as [Original Value],
-	TRIM( 'xyz' from 'xz1111111xyzxyz' ) as [Default], -- default: before and after
-	TRIM(LEADING 'xyz' from 'xz1111111xyzxyz') as [LEADING],  -- remove at beginning
-	TRIM(TRAILING  'xyz' from 'xz1111111xyzxyz') as [TRAILING], -- remove ad the end
-	TRIM(BOTH  'xyz' from 'xz1111111xyzxyz')  as [BOTH] -- remove at the beginning and at the end
-	;
-
-select TRIM(TRAILING 'euro' from '12345Euro') as [Value]
 
 
 --JSON_OBJECT
